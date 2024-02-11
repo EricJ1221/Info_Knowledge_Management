@@ -109,6 +109,41 @@ for (int i = 1; i <= 16; i++) {
             }
             System.out.println();
             }
-    }
+
+
+            System.out.println();
+            System.out.println();
+            System.out.println();
+
+        // Initialize the inverted matrix
+        String[][] invertedMatrix = new String[uniqueWordsList.size()][2];
+
+        // Populate the inverted matrix
+        for (int i = 0; i < uniqueWordsList.size(); i++) {
+            String word = uniqueWordsList.get(i);
+            StringBuilder fileNames = new StringBuilder();
+            for (int j = 0; j < filepaths.length; j++) {
+                List<String> wordsForFile = wordsForFiles.get(j);
+                if (wordsForFile.contains(word)) {
+                    String fileName = filepaths[j].substring(filepaths[j].lastIndexOf("/") + 1);
+                    fileName = fileName.substring(0, fileName.lastIndexOf(".")); // Remove the file extension
+                    fileNames.append(fileName).append(", ");
+                }
+            }
+            // Remove the last comma and space from the fileNames string
+            if (fileNames.length() > 0) {
+                fileNames.setLength(fileNames.length() - 2);
+            }
+            invertedMatrix[i][0] = word;
+            invertedMatrix[i][1] = fileNames.toString();
 }
 
+        // Print the inverted matrix
+        System.out.println("________________________________________________Inverted Matrix_______________________________________________");
+        System.out.println("Unique Words                   \tFiles");
+        System.out.println("");
+        for (int i = 0; i < uniqueWordsList.size(); i++) {
+            System.out.println(invertedMatrix[i][0] + "\t\t" + invertedMatrix[i][1]);
+        }
+    }
+}
