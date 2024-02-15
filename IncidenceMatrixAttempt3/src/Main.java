@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
@@ -91,24 +93,25 @@ for (int i = 1; i <= 16; i++) {
             System.out.print("  ");
             for (int j = 0; j < filepaths.length; j++) {
                 String filepath = filepaths[j];
-            if (filepath.endsWith("01.txt")) {
-                System.out.print("_______"+String.format("%-6s ", filepath.substring(filepath.lastIndexOf("/") + 1))); // Adjust the width for "01.txt"
-            } else {
-                System.out.print(String.format("%-4s__", filepath.substring(filepath.lastIndexOf("/") + 1)));
-            }
-            }
-            System.out.println();
-            for (int i = 0; i < uniqueWordsList.size(); i++) {
-            System.out.print(String.format("%-11s", uniqueWordsList.get(i)));
-            for (int j = 0; j < filepaths.length; j++) {
-                if (filepaths[j].endsWith("01.txt")) {
-                    System.out.print(String.format("%-8d", incidenceMatrix[i][j])); // Adjust the width for "01.txt"
+                if (filepath.endsWith("01.txt")) {
+                    System.out.print("_____" + String.format("%-6s ", filepath.substring(filepath.lastIndexOf("/") + 1))); // Adjust the width for "01.txt"
                 } else {
-                    System.out.print(String.format("%-8d", incidenceMatrix[i][j]));
+                    System.out.print(String.format("%-4s_", filepath.substring(filepath.lastIndexOf("/") + 1)));
                 }
             }
             System.out.println();
+            for (int i = 0; i < uniqueWordsList.size(); i++) {
+                System.out.print(String.format("%-8s", uniqueWordsList.get(i)));
+                for (int j = 0; j < filepaths.length; j++) {
+                    if (filepaths[j].endsWith("01.txt")) {
+                        System.out.print(String.format("%-7d", incidenceMatrix[i][j])); // Adjust the width for "01.txt"
+                    } else {
+                        System.out.print(String.format("%-7d", incidenceMatrix[i][j]));
+                    }
+                }
+                System.out.println();
             }
+
 
 
             System.out.println();
@@ -138,12 +141,56 @@ for (int i = 1; i <= 16; i++) {
             invertedMatrix[i][1] = fileNames.toString();
 }
 
-        // Print the inverted matrix
+       // Print the inverted matrix
         System.out.println("________________________________________________Inverted Matrix_______________________________________________");
         System.out.println("Unique Words                   \tFiles");
         System.out.println("");
         for (int i = 0; i < uniqueWordsList.size(); i++) {
             System.out.println(invertedMatrix[i][0] + "\t\t" + invertedMatrix[i][1]);
+        }
+
+        // Create the file for the inverted matrix and write the matrix into it
+        try (FileWriter writer = new FileWriter("/Users/ericoliver/Desktop/InfoKnowledgeManagementAssignment1/inverted_matrix.txt")) {
+            writer.write("________________________________________________Inverted Matrix_______________________________________________\n");
+            writer.write("\n");
+            writer.write("Unique Words\t\t\t\t\tFiles\n");
+            writer.write("\n");
+            for (int i = 0; i < uniqueWordsList.size(); i++) {
+                writer.write(String.format("%-25s", invertedMatrix[i][0]) + "\t" + invertedMatrix[i][1] + "\n"); // Adjusted formatting
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Create the file for the incidence matrix and write the matrix into it
+        try (FileWriter writer = new FileWriter("/Users/ericoliver/Desktop/InfoKnowledgeManagementAssignment1/incidence_matrix.txt")) {
+            writer.write("________________________________________________Incidence Matrix_______________________________________________\n");
+            writer.write("\n");
+            for (int j = 0; j < filepaths.length; j++) {
+                String filepath = filepaths[j];
+                if (filepath.endsWith("01.txt")) {
+                    writer.write("_____" + String.format("%-6s ", filepath.substring(filepath.lastIndexOf("/") + 1))); // Adjust the width for "01.txt"
+                } else {
+                    writer.write(String.format("%-4s_", filepath.substring(filepath.lastIndexOf("/") + 1)));
+                }
+            }
+            writer.write("\n");
+            writer.write("\n");
+            for (int i = 0; i < uniqueWordsList.size(); i++) {
+                writer.write(String.format("%-8s", uniqueWordsList.get(i)));
+                for (int j = 0; j < filepaths.length; j++) {
+                    if (filepaths[j].endsWith("01.txt")) {
+                        writer.write(String.format("%-7d", incidenceMatrix[i][j])); // Adjust the width for "01.txt"
+                    } else {
+                        writer.write(String.format("%-7d", incidenceMatrix[i][j]));
+                    }
+                }
+                writer.write("\n");
+            }
+
+            writer.write("\n"); // Add a blank line here
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
