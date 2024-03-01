@@ -1,22 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.StringJoiner;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.Map;
-import java.util.HashMap;
 
-
-
-
-public class Main {
-    public static void main(String[] args) {
         
         
         /*String[] wordsToDelete = {"a", "am", "and", "are", "be", "could", "do", "I", "if", "in", "let", "may", "me", "not",
@@ -224,54 +206,95 @@ BiWordIndexer biWordIndexer = new BiWordIndexer();
     }
 }
 */
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.Map;
+import java.util.HashMap;
 
-    // Create a PermutermIndex object
-    PermutermIndex permutermIndex = new PermutermIndex();
 
-    // Array of file paths
-    String[] filePathsPermutermWords = new String[32];
-    for (int i = 1; i <= 32; i++) {
-        filePathsPermutermWords[i - 1] = "/Users/ericoliver/Desktop/InfoKnowledgeManagementAssignment1/eggs2/" + i + ".txt";
-    }
 
-    // Read files using ReadFile class
-    ReadFile readFile = new ReadFile();
-    List<String[]> fileContentsList = readFile.readFiles(filePathsPermutermWords);
 
-    // Insert words into the index
-    // Define the getDocumentsForWord method to get documents for a given word
-    private Set<String> getDocumentsForWord(String word) {
-        // Implementation goes here
-        // Return the set of documents for the word
-    }
+public class Main {
+    public static void main(String[] args) {
 
-    for (String[] lines : fileContentsList) {
-        for (String line : lines) {
-            String[] words = line.split("\\s+");
-            for (String word : words) {
-                Set<String> documents = getDocumentsForWord(word);  // Implement this method to get documents
-                permutermIndex.insertWord(word, word, documents);  // Pass documents to insertWord
-            }
+
+
+// // Create a PermutermIndex object
+PermutermIndex permutermIndex = new PermutermIndex();
+
+// Array of file paths
+String[] filePathsPermutermWords = new String[32];
+for (int i = 1; i <= 32; i++) {
+    filePathsPermutermWords[i - 1] = "/Users/ericoliver/Desktop/InfoKnowledgeManagementAssignment1/eggs2/" + i + ".txt";
+}
+
+// Read files using ReadFile class
+ReadFile readFile = new ReadFile();
+List<String[]> fileContentsList = readFile.readFiles(filePathsPermutermWords);
+
+// Insert words into the index and verify document mapping
+for (int i = 1; i <= fileContentsList.size(); i++) {
+    for (String line : fileContentsList.get(i - 1)) {
+        String[] words = line.split("\\s+");
+        for (String word : words) {
+            // Extract the document name from the file path
+            String documentName = filePathsPermutermWords[i - 1].substring(
+                filePathsPermutermWords[i - 1].lastIndexOf('/') + 1
+            );
+            permutermIndex.insertWord(word, word, documentName);  // Pass document name to insertWord
         }
     }
-
-    // Print the permuterm index
-    permutermIndex.printIndex();
-
-    // Perform wildcard search on the index
-    // You can change the query to "in*" if you want to search for words that end with "in"
-    String query = "*in";
-
-    Set<String> matchingWords = permutermIndex.wildcardSearch(query);
-    System.out.println("Words matching query " + query + " : " + matchingWords);
-    System.out.println("Matching words size: " + matchingWords.size());
-    System.out.println("Matching words: " + matchingWords);
-
-    // Get documents for the wildcard query
-    Set<String> matchingDocuments = permutermIndex.findDocumentsMatchingQuery(query, permutermIndex);
-    System.out.println("Documents matching query " + query + " : " + matchingDocuments);
-
-    // Write the permuterm index to a file
-    permutermIndex.writeIndexToFile("/Users/ericoliver/Desktop/InfoKnowledgeManagementAssignment1/Permuterm_index.txt");
 }
+
+// Perform wildcard search on the index
+// You can change the query to "in*" if you want to search for words that end with "in"
+String query = "*in";
+
+Set<String> matchingWords = permutermIndex.wildcardSearch(query);
+System.out.println("Words matching query " + query + " : " + matchingWords);
+System.out.println("Matching words size: " + matchingWords.size());
+System.out.println("Matching words: " + matchingWords);
+
+
+
+Set<String> matchingDocuments = new HashSet<>();
+// Retrieve documents for each matching word
+for (String word : matchingWords) {
+    Set<String> documents = permutermIndex.getDocumentsForWord(word);
+    System.out.println("Documents for word " + word + ": " + documents);
+    matchingDocuments.addAll(permutermIndex.getDocuments(word));
+}
+List<String> sortedDocuments = new ArrayList<>(matchingDocuments);
+
+// Sort the list using natural order (least to greatest)
+Collections.sort(sortedDocuments);
+System.out.println("Documents for query " + query + ": " + sortedDocuments);
+   
+// Write the permuterm index to a file
+String filePath = "/Users/ericoliver/Desktop/InfoKnowledgeManagementAssignment1/Permuterm_index.txt";
+permutermIndex.writeIndexToFile(filePath);
+
+// Append the sorted documents to the file
+try (FileWriter writer = new FileWriter(filePath, true)) {
+    writer.write("\n");
+    writer.write("Sorted documents for query " + query + ":\n");
+    for (String document : sortedDocuments) {
+        writer.write(document + "\n");
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
+    }
+    
 }
