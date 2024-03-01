@@ -4,12 +4,22 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.Map;
+import java.util.HashMap;
+
+
+
 
 public class Main {
     public static void main(String[] args) {
-        String[] wordsToDelete = {"a", "am", "and", "are", "be", "could", "do", "I", "if", "in", "let", "may", "me", "not",
+        
+        
+        /*String[] wordsToDelete = {"a", "am", "and", "are", "be", "could", "do", "I", "if", "in", "let", "may", "me", "not",
                 "on", "or", "so", "that", "the", "them", "they", "will", "with", "would", "you"};
 
         // Convert all words to lowercase
@@ -192,5 +202,76 @@ for (int i = 1; i <= 16; i++) {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }*/
+/* 
+
+
+// Calling biwordindexer in separate class, need to trouble shoot later, wasn't working correctly. Have to move on to the other problems atm.
+/* 
+BiWordIndexer biWordIndexer = new BiWordIndexer();
+        String[] filePathsBiWord = new String[32];
+        for (int i = 1; i <= 32; i++) {
+            filePathsBiWord[i - 1] = "/Users/ericoliver/Desktop/InfoKnowledgeManagementAssignment1/eggs2/" + i + ".txt";
+        }
+        biWordIndexer.buildBiWordIndex(filePathsBiWord);
+        biWordIndexer.writeBiWordIndexToFile("/Users/ericoliver/Desktop/InfoKnowledgeManagementAssignment1/bi_word_index.txt");
+        Set<Integer> matchingDocuments = biWordIndexer.searchBiWordIndex("mouse like");
+        if (matchingDocuments.isEmpty()) {
+            System.out.println("No documents found for bi-word: mouse like");
+        } else {
+            System.out.println("Documents containing bi-word \"mouse like\": " + matchingDocuments);
+        }
     }
+}
+*/
+
+    // Create a PermutermIndex object
+    PermutermIndex permutermIndex = new PermutermIndex();
+
+    // Array of file paths
+    String[] filePathsPermutermWords = new String[32];
+    for (int i = 1; i <= 32; i++) {
+        filePathsPermutermWords[i - 1] = "/Users/ericoliver/Desktop/InfoKnowledgeManagementAssignment1/eggs2/" + i + ".txt";
+    }
+
+    // Read files using ReadFile class
+    ReadFile readFile = new ReadFile();
+    List<String[]> fileContentsList = readFile.readFiles(filePathsPermutermWords);
+
+    // Insert words into the index
+    // Define the getDocumentsForWord method to get documents for a given word
+    private Set<String> getDocumentsForWord(String word) {
+        // Implementation goes here
+        // Return the set of documents for the word
+    }
+
+    for (String[] lines : fileContentsList) {
+        for (String line : lines) {
+            String[] words = line.split("\\s+");
+            for (String word : words) {
+                Set<String> documents = getDocumentsForWord(word);  // Implement this method to get documents
+                permutermIndex.insertWord(word, word, documents);  // Pass documents to insertWord
+            }
+        }
+    }
+
+    // Print the permuterm index
+    permutermIndex.printIndex();
+
+    // Perform wildcard search on the index
+    // You can change the query to "in*" if you want to search for words that end with "in"
+    String query = "*in";
+
+    Set<String> matchingWords = permutermIndex.wildcardSearch(query);
+    System.out.println("Words matching query " + query + " : " + matchingWords);
+    System.out.println("Matching words size: " + matchingWords.size());
+    System.out.println("Matching words: " + matchingWords);
+
+    // Get documents for the wildcard query
+    Set<String> matchingDocuments = permutermIndex.findDocumentsMatchingQuery(query, permutermIndex);
+    System.out.println("Documents matching query " + query + " : " + matchingDocuments);
+
+    // Write the permuterm index to a file
+    permutermIndex.writeIndexToFile("/Users/ericoliver/Desktop/InfoKnowledgeManagementAssignment1/Permuterm_index.txt");
+}
 }
