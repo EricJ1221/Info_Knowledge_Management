@@ -1,0 +1,29 @@
+________________________________________________Permuterm Index_______________________________________________
+
+Unique Permuterms					Words
+
+anywhere                                          				anywhere$ nywhere$a ywhere$an where$any here$anyw ere$anywh re$anywhe e$anywher
+boat                                              				boat$ oat$b at$bo t$boa
+box                                               				box$ ox$b x$bo
+car                                               				car$ ar$c r$ca
+dark                                              				dark$ ark$d rk$da k$dar
+eat                                               				eat$ at$e t$ea
+eggs                                              				eggs$ ggs$e gs$eg s$egg
+fox                                               				fox$ ox$f x$fo
+goat                                              				goat$ oat$g at$go t$goa
+good                                              				good$ ood$g od$go d$goo
+green                                             				green$ reen$g een$gr en$gre n$gree
+ham                                               				ham$ am$h m$ha
+here                                              				here$ ere$h re$he e$her
+house                                             				house$ ouse$h use$ho se$hou e$hous
+like                                              				like$ ike$l ke$li e$lik
+mouse                                             				mouse$ ouse$m use$mo se$mou e$mous
+rain                                              				rain$ ain$r in$ra n$rai
+sam                                               				sam$ am$s m$sa
+say                                               				say$ ay$s y$sa
+see                                               				see$ ee$s e$se
+thank                                             				thank$ hank$t ank$th nk$tha k$than
+there                                             				there$ here$t ere$th re$the e$ther
+train                                             				train$ rain$t ain$tr in$tra n$trai
+tree                                              				tree$ ree$t ee$tr e$tre
+try                                               				try$ ry$t y$tr
